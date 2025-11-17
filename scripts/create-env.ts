@@ -7,6 +7,8 @@ const envExamplePath = path.join(__dirname, '../.env.example');
 const defaultEnvContent = `PORT=3001
 NODE_ENV=development
 DATABASE_PATH=./chess_statistics.db
+AUTH_USERNAME=admin
+AUTH_PASSWORD=changeme
 `;
 
 function createEnvFile() {

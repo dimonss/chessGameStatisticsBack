@@ -6,14 +6,15 @@ import {
   updatePlayer,
   deletePlayer
 } from '../controllers/playerController';
+import { basicAuth } from '../middleware/auth';
 
 const router = Router();
 
 router.get('/', getAllPlayers);
 router.get('/:id', getPlayerById);
-router.post('/', createPlayer);
-router.put('/:id', updatePlayer);
-router.delete('/:id', deletePlayer);
+router.post('/', basicAuth, createPlayer);
+router.put('/:id', basicAuth, updatePlayer);
+router.delete('/:id', basicAuth, deletePlayer);
 
 export default router;
 

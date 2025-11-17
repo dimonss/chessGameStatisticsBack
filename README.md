@@ -23,12 +23,16 @@ nvm use 24
 npm install
 ```
 
-3. Создайте файл `.env` (опционально, есть значения по умолчанию):
+3. Создайте файл `.env` (можно использовать скрипт `npm run create-env`):
 ```bash
 PORT=3001
 NODE_ENV=development
 DATABASE_PATH=./chess_statistics.db
+AUTH_USERNAME=admin
+AUTH_PASSWORD=changeme
 ```
+
+**Важно:** Измените `AUTH_USERNAME` и `AUTH_PASSWORD` на безопасные значения в продакшн окружении!
 
 4. Заполните базу данных начальными данными:
 ```bash
@@ -54,25 +58,66 @@ npm start
 - UI: `http://localhost:3001/api/docs`
 - JSON: `http://localhost:3001/api/docs.json`
 
+## Аутентификация
+
+API использует **Basic Authentication** для защиты эндпоинтов, которые изменяют данные (POST, PUT, DELETE).
+
+### Защищенные эндпоинты:
+- `POST /api/players` - требует аутентификации
+- `PUT /api/players/:id` - требует аутентификации
+- `DELETE /api/players/:id` - требует аутентификации
+- `POST /api/games` - требует аутентификации
+- `PUT /api/games/:id` - требует аутентификации
+- `DELETE /api/games/:id` - требует аутентификации
+
+### Публичные эндпоинты (без аутентификации):
+- Все GET запросы (чтение данных)
+
+### Использование Basic Auth:
+
+**В curl:**
+```bash
+curl -X POST http://localhost:3001/api/players \
+  -u "admin:changeme" \
+  -H "Content-Type: application/json" \
+  -d '{...}'
+```
+
+**В JavaScript/Fetch:**
+```javascript
+const credentials = btoa('admin:changeme');
+fetch('http://localhost:3001/api/players', {
+  method: 'POST',
+  headers: {
+    'Authorization': `Basic ${credentials}`,
+    'Content-Type': 'application/json'
+  },
+  body: JSON.stringify({...})
+});
+```
+
+**В Swagger UI:**
+Нажмите кнопку "Authorize" в правом верхнем углу и введите учетные данные из `.env` файла.
+
 ## API Endpoints
 
 ### Players (Игроки)
 
-- `GET /api/players` - Получить всех игроков
-- `GET /api/players/:id` - Получить игрока по ID
-- `POST /api/players` - Создать нового игрока
-- `PUT /api/players/:id` - Обновить игрока
-- `DELETE /api/players/:id` - Удалить игрока
+- `GET /api/players` - Получить всех игроков (публичный)
+- `GET /api/players/:id` - Получить игрока по ID (публичный)
+- `POST /api/players` - Создать нового игрока 🔒
+- `PUT /api/players/:id` - Обновить игрока 🔒
+- `DELETE /api/players/:id` - Удалить игрока 🔒
 
 ### Games (Игры)
 
-- `GET /api/games` - Получить все игры (опциональный query параметр `?playerId=...`)
-- `GET /api/games/:id` - Получить игру по ID
-- `GET /api/games/player/:playerId` - Получить все игры игрока
-- `GET /api/games/player/:playerId/statistics` - Получить статистику игрока
-- `POST /api/games` - Создать новую игру
-- `PUT /api/games/:id` - Обновить игру
-- `DELETE /api/games/:id` - Удалить игру
+- `GET /api/games` - Получить все игры (опциональный query параметр `?playerId=...`) (публичный)
+- `GET /api/games/:id` - Получить игру по ID (публичный)
+- `GET /api/games/player/:playerId` - Получить все игры игрока (публичный)
+- `GET /api/games/player/:playerId/statistics` - Получить статистику игрока (публичный)
+- `POST /api/games` - Создать новую игру 🔒
+- `PUT /api/games/:id` - Обновить игру 🔒
+- `DELETE /api/games/:id` - Удалить игру 🔒
 
 ### Health Check
 
@@ -92,9 +137,10 @@ src/
 
 ## Примеры запросов
 
-### Создать игрока
+### Создать игрока (требует аутентификации)
 ```bash
 curl -X POST http://localhost:3001/api/players \
+  -u "admin:changeme" \
   -H "Content-Type: application/json" \
   -d '{
     "name": "John Doe",
@@ -108,9 +154,10 @@ curl -X POST http://localhost:3001/api/players \
 curl http://localhost:3001/api/games/player/1/statistics
 ```
 
-### Создать игру
+### Создать игру (требует аутентификации)
 ```bash
 curl -X POST http://localhost:3001/api/games \
+  -u "admin:changeme" \
   -H "Content-Type: application/json" \
   -d '{
     "date": "2024-01-15",

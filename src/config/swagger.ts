@@ -20,6 +20,13 @@ const definition = {
     { name: 'Games', description: 'Управление партиями и статистикой' }
   ],
   components: {
+    securitySchemes: {
+      basicAuth: {
+        type: 'http',
+        scheme: 'basic',
+        description: 'Basic Authentication. Используйте учетные данные из .env файла (AUTH_USERNAME и AUTH_PASSWORD)'
+      }
+    },
     schemas: {
       Player: {
         type: 'object',
@@ -211,6 +218,7 @@ const definition = {
       post: {
         tags: ['Players'],
         summary: 'Создать нового игрока',
+        security: [{ basicAuth: [] }],
         requestBody: {
           required: true,
           content: {
@@ -230,6 +238,14 @@ const definition = {
           },
           400: {
             description: 'Неверные данные',
+            content: {
+              'application/json': {
+                schema: { $ref: '#/components/schemas/ErrorResponse' }
+              }
+            }
+          },
+          401: {
+            description: 'Требуется аутентификация',
             content: {
               'application/json': {
                 schema: { $ref: '#/components/schemas/ErrorResponse' }
@@ -282,6 +298,7 @@ const definition = {
       put: {
         tags: ['Players'],
         summary: 'Обновить данные игрока',
+        security: [{ basicAuth: [] }],
         requestBody: {
           required: true,
           content: {
@@ -306,16 +323,33 @@ const definition = {
                 schema: { $ref: '#/components/schemas/ErrorResponse' }
               }
             }
+          },
+          401: {
+            description: 'Требуется аутентификация',
+            content: {
+              'application/json': {
+                schema: { $ref: '#/components/schemas/ErrorResponse' }
+              }
+            }
           }
         }
       },
       delete: {
         tags: ['Players'],
         summary: 'Удалить игрока',
+        security: [{ basicAuth: [] }],
         responses: {
           204: { description: 'Игрок удален' },
           404: {
             description: 'Игрок не найден',
+            content: {
+              'application/json': {
+                schema: { $ref: '#/components/schemas/ErrorResponse' }
+              }
+            }
+          },
+          401: {
+            description: 'Требуется аутентификация',
             content: {
               'application/json': {
                 schema: { $ref: '#/components/schemas/ErrorResponse' }
@@ -354,6 +388,7 @@ const definition = {
       post: {
         tags: ['Games'],
         summary: 'Создать новую игру',
+        security: [{ basicAuth: [] }],
         requestBody: {
           required: true,
           content: {
@@ -373,6 +408,14 @@ const definition = {
           },
           400: {
             description: 'Неверные данные',
+            content: {
+              'application/json': {
+                schema: { $ref: '#/components/schemas/ErrorResponse' }
+              }
+            }
+          },
+          401: {
+            description: 'Требуется аутентификация',
             content: {
               'application/json': {
                 schema: { $ref: '#/components/schemas/ErrorResponse' }
@@ -417,6 +460,7 @@ const definition = {
       put: {
         tags: ['Games'],
         summary: 'Обновить данные игры',
+        security: [{ basicAuth: [] }],
         requestBody: {
           required: true,
           content: {
@@ -441,16 +485,33 @@ const definition = {
                 schema: { $ref: '#/components/schemas/ErrorResponse' }
               }
             }
+          },
+          401: {
+            description: 'Требуется аутентификация',
+            content: {
+              'application/json': {
+                schema: { $ref: '#/components/schemas/ErrorResponse' }
+              }
+            }
           }
         }
       },
       delete: {
         tags: ['Games'],
         summary: 'Удалить игру',
+        security: [{ basicAuth: [] }],
         responses: {
           204: { description: 'Игра удалена' },
           404: {
             description: 'Игра не найдена',
+            content: {
+              'application/json': {
+                schema: { $ref: '#/components/schemas/ErrorResponse' }
+              }
+            }
+          },
+          401: {
+            description: 'Требуется аутентификация',
             content: {
               'application/json': {
                 schema: { $ref: '#/components/schemas/ErrorResponse' }

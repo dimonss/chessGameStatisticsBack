@@ -8,6 +8,7 @@ import {
   updateGame,
   deleteGame
 } from '../controllers/gameController';
+import { basicAuth } from '../middleware/auth';
 
 const router = Router();
 
@@ -15,9 +16,9 @@ router.get('/', getAllGames);
 router.get('/:id', getGameById);
 router.get('/player/:playerId', getPlayerGames);
 router.get('/player/:playerId/statistics', getPlayerStatistics);
-router.post('/', createGame);
-router.put('/:id', updateGame);
-router.delete('/:id', deleteGame);
+router.post('/', basicAuth, createGame);
+router.put('/:id', basicAuth, updateGame);
+router.delete('/:id', basicAuth, deleteGame);
 
 export default router;
 
