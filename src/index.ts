@@ -4,6 +4,8 @@ import { config } from 'dotenv';
 import { runMigrations } from './database/migrations';
 import playerRoutes from './routes/playerRoutes';
 import gameRoutes from './routes/gameRoutes';
+import swaggerUi from 'swagger-ui-express';
+import { swaggerSpec } from './config/swagger';
 
 config();
 
@@ -17,6 +19,12 @@ app.use(express.urlencoded({ extended: true }));
 
 // Initialize database
 runMigrations();
+
+// API docs
+app.use('/api/docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec, { explorer: true }));
+app.get('/api/docs.json', (req, res) => {
+  res.json(swaggerSpec);
+});
 
 // Routes
 app.use('/api/players', playerRoutes);

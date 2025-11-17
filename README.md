@@ -50,6 +50,10 @@ npm start
 
 Сервер будет доступен по адресу `http://localhost:3001`
 
+### Swagger / API Docs
+- UI: `http://localhost:3001/api/docs`
+- JSON: `http://localhost:3001/api/docs.json`
+
 ## API Endpoints
 
 ### Players (Игроки)
