@@ -7,6 +7,8 @@
     "dev": "nodemon --exec ts-node src/index.ts",
     "build": "tsc",
     "start": "node dist/index.js",
+    "init-db": "ts-node src/database/init-db.ts",
+    "init-db:seed": "ts-node src/database/init-db.ts --seed",
     "seed": "ts-node src/database/seed.ts",
     "create-env": "ts-node scripts/create-env.ts",
     "postinstall": "npm rebuild better-sqlite3"
