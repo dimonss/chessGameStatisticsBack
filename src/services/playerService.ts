@@ -1,10 +1,41 @@
 import db from '../database/db';
-import { Player } from '../types/chess';
+import { Player, PlayerWithStats } from '../types/chess';
+import { gameService } from './gameService';
 
 export class PlayerService {
   getAllPlayers(): Player[] {
     const stmt = db.prepare('SELECT * FROM players ORDER BY rating DESC');
     return stmt.all() as Player[];
+  }
+
+  getAllPlayersWithStats(): PlayerWithStats[] {
+    const players = this.getAllPlayers();
+    
+    return players.map(player => {
+      const games = gameService.getGamesByPlayerId(player.id);
+      
+      const wins = games.filter(g => g.result === 'win').length;
+      const losses = games.filter(g => g.result === 'loss').length;
+      const draws = games.filter(g => g.result === 'draw').length;
+      const totalGames = games.length;
+      const winRate = totalGames > 0 ? (wins / totalGames) * 100 : 0;
+      
+      // Получаем последний рейтинг из последней игры или используем базовый рейтинг
+      const latestGame = games[0];
+      const currentRating = latestGame?.rating.after || player.rating;
+      
+      return {
+        ...player,
+        stats: {
+          totalGames,
+          wins,
+          losses,
+          draws,
+          winRate,
+          currentRating
+        }
+      };
+    });
   }
 
   getPlayerById(id: string): Player | null {

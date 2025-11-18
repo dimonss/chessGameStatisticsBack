@@ -44,3 +44,14 @@ export interface GameStatistics {
   recentGames: ChessGame[];
 }
 
+export interface PlayerWithStats extends Player {
+  stats: {
+    totalGames: number;
+    wins: number;
+    losses: number;
+    draws: number;
+    winRate: number;
+    currentRating: number;
+  };
+}
+

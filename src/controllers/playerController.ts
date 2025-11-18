@@ -3,7 +3,8 @@ import { playerService } from '../services/playerService';
 
 export const getAllPlayers = async (req: Request, res: Response) => {
   try {
-    const players = playerService.getAllPlayers();
+    // Return players with statistics to avoid N+1 queries on frontend
+    const players = playerService.getAllPlayersWithStats();
     res.json(players);
   } catch (error) {
     res.status(500).json({ error: 'Failed to fetch players' });
