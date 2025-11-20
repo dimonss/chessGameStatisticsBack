@@ -4,6 +4,7 @@ import { config } from 'dotenv';
 import { runMigrations } from './database/migrations';
 import playerRoutes from './routes/playerRoutes';
 import gameRoutes from './routes/gameRoutes';
+import authRoutes from './routes/authRoutes';
 import swaggerUi from 'swagger-ui-express';
 import { swaggerSpec } from './config/swagger';
 
@@ -27,6 +28,7 @@ app.get('/api/docs.json', (req, res) => {
 });
 
 // Routes
+app.use('/api/auth', authRoutes);
 app.use('/api/players', playerRoutes);
 app.use('/api/games', gameRoutes);
 
