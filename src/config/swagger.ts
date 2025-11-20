@@ -10,6 +10,10 @@ const definition = {
   },
   servers: [
     {
+      url: process.env.LINK_TO_PRODUCTS,
+      description: 'Production server'
+    },
+    {
       url: 'http://localhost:3001',
       description: 'Local development server'
     }
