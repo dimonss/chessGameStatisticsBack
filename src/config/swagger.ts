@@ -10,7 +10,7 @@ const definition = {
   },
   servers: [
     {
-      url: process.env.LINK_TO_PRODUCTS,
+      url: process.env.LINK_TO_PRODUCT,
       description: 'Production server'
     },
     {
