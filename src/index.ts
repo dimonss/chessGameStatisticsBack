@@ -34,7 +34,7 @@ app.use(`${apiPrefix}/players`, playerRoutes);
 app.use(`${apiPrefix}/games`, gameRoutes);
 
 // Health check
-app.get('/health', (req, res) => {
+app.get(`${apiPrefix}/health`, (req, res) => {
   res.json({ status: 'ok', message: 'Chess Statistics API is running' });
 });
 

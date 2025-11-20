@@ -130,7 +130,7 @@ fetch('http://localhost:3001/api/players', {
 
 ### Health Check
 
-- `GET /health` - Проверка работоспособности API
+- `GET /api/health` - Проверка работоспособности API
 
 ## Структура проекта
 

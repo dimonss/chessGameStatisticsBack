@@ -179,7 +179,7 @@ const definition = {
     }
   },
   paths: {
-    '/health': {
+    '/api/health': {
       get: {
         tags: ['Health'],
         summary: 'Проверка состояния API',
