@@ -20,15 +20,15 @@ app.use(express.urlencoded({ extended: true }));
 
 // Initialize database
 runMigrations();
+const apiPrefix = process.env.NODE_ENV === 'development' ? '/api' : '';
 
 // API docs
-app.use('/api/docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec, { explorer: true }));
-app.get('/api/docs.json', (req, res) => {
+app.use(`${apiPrefix}/docs`, swaggerUi.serve, swaggerUi.setup(swaggerSpec, { explorer: true }));
+app.get(`${apiPrefix}/docs.json`, (req, res) => {
   res.json(swaggerSpec);
 });
 
 // Routes - use /api prefix only in development
-const apiPrefix = process.env.NODE_ENV === 'development' ? '/api' : '';
 app.use(`${apiPrefix}/auth`, authRoutes);
 app.use(`${apiPrefix}/players`, playerRoutes);
 app.use(`${apiPrefix}/games`, gameRoutes);
