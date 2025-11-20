@@ -27,10 +27,11 @@ app.get('/api/docs.json', (req, res) => {
   res.json(swaggerSpec);
 });
 
-// Routes
-app.use('/api/auth', authRoutes);
-app.use('/api/players', playerRoutes);
-app.use('/api/games', gameRoutes);
+// Routes - use /api prefix only in development
+const apiPrefix = process.env.NODE_ENV === 'development' ? '/api' : '';
+app.use(`${apiPrefix}/auth`, authRoutes);
+app.use(`${apiPrefix}/players`, playerRoutes);
+app.use(`${apiPrefix}/games`, gameRoutes);
 
 // Health check
 app.get('/health', (req, res) => {
