@@ -32,9 +32,20 @@ export class PlayerService {
           losses,
           draws,
           winRate,
-          currentRating
+          currentRating,
+          lastGameDate: latestGame?.date
         }
       };
+    }).sort((a, b) => {
+      const dateA = a.stats.lastGameDate;
+      const dateB = b.stats.lastGameDate;
+
+      if (dateA && dateB) {
+        return new Date(dateB).getTime() - new Date(dateA).getTime();
+      }
+      if (dateA) return -1;
+      if (dateB) return 1;
+      return 0;
     });
   }
 
