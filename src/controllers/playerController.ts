@@ -78,3 +78,23 @@ export const deletePlayer = async (req: Request, res: Response) => {
   }
 };
 
+export const uploadAvatar = async (req: Request, res: Response) => {
+  try {
+    if (!req.file) {
+      return res.status(400).json({ error: 'No file uploaded' });
+    }
+
+    // Формируем путь для доступа к файлу
+    const apiPrefix = process.env.NODE_ENV === 'development' ? '/api' : '';
+    const avatarPath = `${apiPrefix}/uploads/avatars/${req.file.filename}`;
+
+    res.json({ 
+      avatar: avatarPath,
+      filename: req.file.filename
+    });
+  } catch (error) {
+    console.error('Avatar upload error:', error);
+    res.status(500).json({ error: 'Failed to upload avatar' });
+  }
+};
+
