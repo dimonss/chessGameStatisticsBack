@@ -175,6 +175,22 @@ const definition = {
         properties: {
           error: { type: 'string', example: 'Player not found' }
         }
+      },
+      UploadAvatarResponse: {
+        type: 'object',
+        properties: {
+          avatar: { 
+            type: 'string', 
+            example: '/api/uploads/avatars/avatar-1234567890-123456789.jpg',
+            description: 'Путь к загруженному файлу аватара'
+          },
+          filename: { 
+            type: 'string', 
+            example: 'avatar-1234567890-123456789.jpg',
+            description: 'Имя сохраненного файла'
+          }
+        },
+        required: ['avatar', 'filename']
       }
     }
   },
@@ -354,6 +370,77 @@ const definition = {
           },
           401: {
             description: 'Требуется аутентификация',
+            content: {
+              'application/json': {
+                schema: { $ref: '#/components/schemas/ErrorResponse' }
+              }
+            }
+          }
+        }
+      }
+    },
+    '/api/players/upload-avatar': {
+      post: {
+        tags: ['Players'],
+        summary: 'Загрузить аватар игрока',
+        description: 'Загружает изображение аватара на сервер. Поддерживаемые форматы: JPEG, PNG, GIF, WebP. Максимальный размер файла: 5MB.',
+        security: [{ basicAuth: [] }],
+        requestBody: {
+          required: true,
+          content: {
+            'multipart/form-data': {
+              schema: {
+                type: 'object',
+                properties: {
+                  avatar: {
+                    type: 'string',
+                    format: 'binary',
+                    description: 'Файл изображения аватара'
+                  }
+                },
+                required: ['avatar']
+              }
+            }
+          }
+        },
+        responses: {
+          200: {
+            description: 'Аватар успешно загружен',
+            content: {
+              'application/json': {
+                schema: { $ref: '#/components/schemas/UploadAvatarResponse' }
+              }
+            }
+          },
+          400: {
+            description: 'Ошибка загрузки файла',
+            content: {
+              'application/json': {
+                schema: { $ref: '#/components/schemas/ErrorResponse' },
+                examples: {
+                  noFile: {
+                    value: { error: 'No file uploaded' }
+                  },
+                  invalidType: {
+                    value: { error: 'Invalid file type. Only JPEG, PNG, GIF and WebP images are allowed.' }
+                  },
+                  fileTooLarge: {
+                    value: { error: 'File too large. Maximum size is 5MB.' }
+                  }
+                }
+              }
+            }
+          },
+          401: {
+            description: 'Требуется аутентификация',
+            content: {
+              'application/json': {
+                schema: { $ref: '#/components/schemas/ErrorResponse' }
+              }
+            }
+          },
+          500: {
+            description: 'Ошибка сервера при загрузке',
             content: {
               'application/json': {
                 schema: { $ref: '#/components/schemas/ErrorResponse' }
